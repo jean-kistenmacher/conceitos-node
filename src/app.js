@@ -23,7 +23,7 @@ app.post("/repositories", (request, response) => {
     url,
     techs,
     likes:0
-  }
+  };
   repositories.push(repository);
   
   return response.json(repository);
@@ -31,25 +31,34 @@ app.post("/repositories", (request, response) => {
 
 app.put("/repositories/:id", (request, response) => {
   const {id} = request.params;
-  const {title, url, techs } = request.body;
+  const { title, url, techs} = request.body;
 
-  const  findRepositoryIndex = repositories.findIndex( reposirory => 
-    repository.id === id
+  const  findRepositoryIndex = repositories.findIndex(
+    repository => repository.id === id
   );
 
   if(findRepositoryIndex === -1){
-    return response.status(400).json({error:'Repository not found'}); 
+    return response.status(400).json({error:'Repository not found'});
   }
 
-  const repository = { id,title, url, techs, likes:repositories[findRepositoryIndex].likes };
+  const repository = {
+    id,
+    title,
+    url,
+    techs,
+    likes: repositories[findRepositoryIndex].likes,
+  }
+
   repositories[findRepositoryIndex] = repository;
-  return reponse.json(repository);
+
+  return response.json(repository);
 });
 
 app.delete("/repositories/:id", (request, response) => {
   const {id} = request.params;
+
   const  findRepositoryIndex = repositories.findIndex(
-    reposirory => repository.id === id
+    repository => repository.id === id
   );
 
   if(findRepositoryIndex >= 0){
@@ -63,14 +72,17 @@ app.delete("/repositories/:id", (request, response) => {
 
 app.post("/repositories/:id/like", (request, response) => {
   const {id} = request.params;
-  const  findRepositoryIndex = repositories.findIndex(
-    reposirory => repository.id === id
+
+  const  findRepositoryIndex = repositories.findIndex(repository => 
+    repository.id === id
   );
+
   if(findRepositoryIndex === -1){
     return response.status(400).json({error:'Repository not found'}); 
   }
 
-  repositories[findRepositoryIndex].likes++;
+  repositories[findRepositoryIndex].likes += 1;
+
   return response.json(repositories[findRepositoryIndex]);
 });
 
